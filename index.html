@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager Pro - Advanced</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      :root {
+        --primary: #667eea;
+        --primary-dark: #5568d3;
+        --secondary: #764ba2;
+        --success: #00b894;
+        --danger: #ff7675;
+        --warning: #fdcb6e;
+        --info: #74b9ff;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8f9fa;
+        --bg-tertiary: #e9ecef;
+        --text-primary: #2d3436;
+        --text-secondary: #636e72;
+        --border: #dee2e6;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --gradient: linear-gradient(
+          135deg,
+          #8b5cf6 0%,
+          #a855f7 50%,
+          #c084fc 100%
+        );
+        --gradient-success: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        --gradient-danger: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+        --gradient-warning: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+        --glass-bg: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.2);
+      }
+
+      [data-theme="dark"] {
+        --bg-primary: #1e1e1e;
+        --bg-secondary: #2d2d2d;
+        --bg-tertiary: #3a3a3a;
+        --text-primary: #e0e0e0;
+        --text-secondary: #b0b0b0;
+        --border: #404040;
+        --shadow: rgba(0, 0, 0, 0.3);
+      }
+
+      [data-theme="dark"] .card {
+        background: rgba(30, 30, 30, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #e0e0e0;
+      }
+
+      [data-theme="dark"] .tasks-panel {
+        background: rgba(30, 30, 30, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #e0e0e0;
+      }
+
+      [data-theme="dark"] .stat-card {
+        background: rgba(30, 30, 30, 0.9);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #e0e0e0;
+      }
+
+      [data-theme="dark"] .task-item {
+        background: rgba(30, 30, 30, 0.9);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #e0e0e0;
+      }
+
+      [data-theme="dark"] .form-group input,
+      [data-theme="dark"] .form-group textarea,
+      [data-theme="dark"] .form-group select {
+        background: rgba(30, 30, 30, 0.8);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: #e0e0e0;
+      }
+
+      [data-theme="dark"] .quick-add input {
+        background: rgba(30, 30, 30, 0.9);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: #e0e0e0;
+      }
+
+      [data-theme="dark"] .quick-add input::placeholder {
+        color: #b0b0b0;
+      }
+
+      [data-theme="dark"] .add-task-form {
+        background: rgba(30, 30, 30, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      [data-theme="dark"] .btn-secondary {
+        background: linear-gradient(135deg, #2d2d2d 0%, #3a3a3a 100%);
+        color: #e0e0e0;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      [data-theme="dark"] .category-all {
+        background: #2d3436;
+        color: white;
+        border: 2px solid #ffffff;
+      }
+
+      [data-theme="dark"] .category-work {
+        color: white;
+        border: 2px solid #ffffff;
+      }
+
+      [data-theme="dark"] .category-personal {
+        color: white;
+        border: 2px solid #ffffff;
+      }
+
+      [data-theme="dark"] .category-study {
+        color: white;
+        border: 2px solid #ffffff;
+      }
+
+      [data-theme="dark"] .category-shopping {
+        color: white;
+        border: 2px solid #ffffff;
+      }
+
+      [data-theme="dark"] .category-other {
+        color: white;
+        border: 2px solid #ffffff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #000000;
+        color: var(--text-primary);
+        transition: background 0.3s, color 0.3s;
+        position: relative;
+        overflow-x: hidden;
+      }
+      /* Galaxy theme - Continuous falling stars */
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 255, 255, 0.8) 1px,
+            rgba(255, 255, 255, 0.1) 3px,
+            transparent 5px
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(255, 255, 255, 0.6) 1px,
+            rgba(255, 255, 255, 0.1) 2px,
+            transparent 4px
+          ),
+          radial-gradient(
+            circle at 40% 60%,
+            rgba(255, 255, 255, 0.9) 1px,
+            rgba(255, 255, 255, 0.2) 2px,
+            transparent 3px
+          ),
+          radial-gradient(
+            circle at 60% 40%,
+            rgba(255, 255, 255, 0.7) 1px,
+            rgba(255, 255, 255, 0.1) 2px,
+            transparent 4px
+          ),
+          radial-gradient(
+            circle at 10% 90%,
+            rgba(255, 255, 255, 0.8) 1px,
+            rgba(255, 255, 255, 0.1) 3px,
+            transparent 5px
+          ),
+          radial-gradient(
+            circle at 90% 10%,
+            rgba(255, 255, 255, 0.6) 1px,
+            rgba(255, 255, 255, 0.1) 2px,
+            transparent 4px
+          );
+        background-size: 200px 200px, 150px 150px, 180px 180px, 120px 120px,
+          250px 250px, 100px 100px;
+        animation: fallingStars1 4s infinite linear;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(
+            circle at 30% 30%,
+            rgba(255, 255, 255, 0.7) 1px,
+            rgba(255, 255, 255, 0.1) 2px,
+            transparent 4px
+          ),
+          radial-gradient(
+            circle at 70% 70%,
+            rgba(255, 255, 255, 0.8) 1px,
+            rgba(255, 255, 255, 0.15) 2px,
+            transparent 3px
+          ),
+          radial-gradient(
+            circle at 50% 20%,
+            rgba(255, 255, 255, 0.6) 1px,
+            rgba(255, 255, 255, 0.1) 2px,
+            transparent 4px
+          ),
+          radial-gradient(
+            circle at 20% 80%,
+            rgba(255, 255, 255, 0.9) 1px,
+            rgba(255, 255, 255, 0.2) 2px,
+            transparent 3px
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 255, 255, 0.7) 1px,
+            rgba(255, 255, 255, 0.1) 2px,
+            transparent 4px
+          ),
+          radial-gradient(
+            circle at 60% 80%,
+            rgba(255, 255, 255, 0.8) 1px,
+            rgba(255, 255, 255, 0.15) 2px,
+            transparent 3px
+          );
+        background-size: 180px 180px, 160px 160px, 140px 140px, 200px 200px,
+          120px 120px, 190px 190px;
+        animation: fallingStars2 4s infinite linear;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      @keyframes fallingStars1 {
+        0% {
+          transform: translateY(-100vh) translateX(0px);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) translateX(30px);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fallingStars2 {
+        0% {
+          transform: translateY(-100vh) translateX(0px);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) translateX(-20px);
+          opacity: 1;
+        }
+      }
+      /* Hide default cursor */
+
+      * {
+        cursor: none !important;
+      }
+      /* Custom cursor animation */
+
+      .custom-cursor {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #00b894;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transition: all 0.1s ease;
+        background: radial-gradient(
+          circle,
+          rgba(0, 184, 148, 0.4) 0%,
+          transparent 70%
+        );
+        box-shadow: 0 0 20px rgba(0, 184, 148, 0.8);
+      }
+
+      .custom-cursor::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 6px;
+        height: 6px;
+        background: #00b894;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        animation: cursorPulse 2s infinite;
+      }
+
+      @keyframes cursorPulse {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.5);
+          opacity: 0.7;
+        }
+      }
+
+      .custom-cursor.hover {
+        width: 40px;
+        height: 40px;
+        border-color: #667eea;
+        background: radial-gradient(
+          circle,
+          rgba(102, 126, 234, 0.4) 0%,
+          transparent 70%
+        );
+        box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+      }
+
+      .custom-cursor.hover::before {
+        background: #667eea;
+      }
+
+      .custom-cursor.click {
+        width: 15px;
+        height: 15px;
+        border-color: #ff7675;
+        background: radial-gradient(
+          circle,
+          rgba(255, 118, 117, 0.4) 0%,
+          transparent 70%
+        );
+        box-shadow: 0 0 25px rgba(255, 118, 117, 0.8);
+      }
+
+      .custom-cursor.click::before {
+        background: #ff7675;
+      }
+
+      /* Party Popper Animation */
+      .party-popper {
+        position: fixed;
+        pointer-events: none;
+        z-index: 10000;
+        animation: partyBurst 1.5s ease-out forwards;
+      }
+
+      .confetti {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: #ff6b6b;
+        animation: confettiFall 1.5s ease-out forwards;
+      }
+
+      .confetti:nth-child(1) { background: #ff6b6b; animation-delay: 0s; }
+      .confetti:nth-child(2) { background: #4ecdc4; animation-delay: 0.1s; }
+      .confetti:nth-child(3) { background: #45b7d1; animation-delay: 0.2s; }
+      .confetti:nth-child(4) { background: #fdcb6e; animation-delay: 0.3s; }
+      .confetti:nth-child(5) { background: #a29bfe; animation-delay: 0.4s; }
+      .confetti:nth-child(6) { background: #fd79a8; animation-delay: 0.5s; }
+      .confetti:nth-child(7) { background: #00b894; animation-delay: 0.6s; }
+      .confetti:nth-child(8) { background: #e17055; animation-delay: 0.7s; }
+      .confetti:nth-child(9) { background: #6c5ce7; animation-delay: 0.8s; }
+      .confetti:nth-child(10) { background: #e84393; animation-delay: 0.9s; }
+
+      @keyframes partyBurst {
+        0% {
+          transform: scale(0) rotate(0deg);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.2) rotate(180deg);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1.5) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      @keyframes confettiFall {
+        0% {
+          transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+        25% {
+          transform: translateY(50px) translateX(20px) rotate(180deg) scale(1.3);
+          opacity: 0.9;
+        }
+        50% {
+          transform: translateY(100px) translateX(-10px) rotate(360deg) scale(1.1);
+          opacity: 0.7;
+        }
+        75% {
+          transform: translateY(180px) translateX(15px) rotate(540deg) scale(0.8);
+          opacity: 0.4;
+        }
+        100% {
+          transform: translateY(300px) translateX(-5px) rotate(720deg) scale(0.3);
+          opacity: 0;
+        }
+      }
+
+      .app-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Improve touch targets and fluid spacing */
+      .btn,
+      .theme-toggle {
+        min-height: 44px; /* recommended touch target */
+      }
+
+      .header {
+        background: linear-gradient(
+          135deg,
+          #8b5cf6 0%,
+          #a855f7 50%,
+          #c084fc 100%
+        );
+        color: white;
+        padding: 30px;
+        border-radius: 25px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          45deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.1) 50%,
+          transparent 70%
+        );
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .header-title {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .header-title h1 {
+        font-size: 2em;
+      }
+
+      .header-controls {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .theme-toggle {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        padding: 10px 15px;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+        font-size: 1.2em;
+        transition: all 0.3s;
+      }
+
+      .theme-toggle:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          #8b5cf6 0%,
+          #a855f7 50%,
+          #c084fc 100%
+        );
+        color: white;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        color: #2d3436;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        font-weight: 600;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn:active {
+        transform: translateY(-1px) scale(0.98);
+      }
+
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: 30px;
+      }
+
+      .tasks-panel {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 25px;
+        padding: 25px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+      }
+
+      .card-title {
+        font-size: 1.3em;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .quick-add {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+      }
+
+      .quick-add input {
+        flex: 1;
+        padding: 12px 15px;
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #2d3436;
+        font-size: 1em;
+        font-weight: 500;
+      }
+
+      .quick-add input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: rgba(255, 255, 255, 1);
+        color: #2d3436;
+      }
+
+      .quick-add input::placeholder {
+        color: #636e72;
+        font-weight: 500;
+      }
+
+      .add-task-form {
+        background: var(--bg-secondary);
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.9em;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #2d3436;
+        font-size: 1em;
+        font-family: inherit;
+        font-weight: 500;
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 70px;
+      }
+
+      .form-group input::placeholder,
+      .form-group textarea::placeholder {
+        color: #636e72;
+        font-weight: 500;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .categories-filter {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 25px;
+      }
+
+      .category-badge {
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .category-badge::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .category-badge:hover::before {
+        left: 100%;
+      }
+
+      .category-badge:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .category-badge.active {
+        border-color: var(--text-primary);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .category-all {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        color: #2d3436;
+        font-weight: 600;
+      }
+
+      .category-work {
+        background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+        color: #2d3436;
+        font-weight: 600;
+        border: 2px solid #2d3436;
+      }
+
+      .category-personal {
+        background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+        color: #2d3436;
+        font-weight: 600;
+        border: 2px solid #2d3436;
+      }
+
+      .category-study {
+        background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+        color: #2d3436;
+        font-weight: 600;
+        border: 2px solid #2d3436;
+      }
+
+      .category-shopping {
+        background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+        color: #2d3436;
+        font-weight: 600;
+        border: 2px solid #2d3436;
+      }
+
+      .category-other {
+        background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        color: #2d3436;
+        font-weight: 600;
+        border: 2px solid #2d3436;
+      }
+
+      .progress-section {
+        margin-bottom: 25px;
+      }
+
+      .progress-bar-container {
+        background: var(--bg-tertiary);
+        border-radius: 10px;
+        height: 30px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          #8b5cf6 0%,
+          #a855f7 50%,
+          #c084fc 100%
+        );
+        transition: width 0.5s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .progress-bar::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: progressShimmer 2s infinite;
+      }
+
+      @keyframes progressShimmer {
+        0% {
+          left: -100%;
+        }
+        100% {
+          left: 100%;
+        }
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+      }
+
+      .stat-card {
+        background: rgba(248, 249, 250, 0.9);
+        padding: 20px;
+        border-radius: 20px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .stat-number {
+        font-size: 2em;
+        font-weight: bold;
+        background: linear-gradient(
+          135deg,
+          #8b5cf6 0%,
+          #a855f7 50%,
+          #c084fc 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.85em;
+        margin-top: 5px;
+      }
+
+      .tasks-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .task-item {
+        background: rgba(248, 249, 250, 0.9);
+        border: 2px solid rgba(222, 226, 230, 0.5);
+        border-radius: 20px;
+        padding: 20px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: move;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+      }
+
+      .task-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(102, 126, 234, 0.1),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .task-item:hover::before {
+        left: 100%;
+      }
+
+      .task-item:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary);
+      }
+
+      .task-item.dragging {
+        opacity: 0.5;
+      }
+
+      .task-item.completed {
+        opacity: 0.6;
+      }
+
+      .task-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 10px;
+      }
+
+      .task-checkbox {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        margin-top: 2px;
+      }
+
+      .complete-btn {
+        background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 120px;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .complete-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .complete-btn:hover::before {
+        left: 100%;
+      }
+
+      .complete-btn:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4);
+      }
+
+      .complete-btn.completed {
+        background: linear-gradient(135deg, #636e72 0%, #2d3436 100%);
+        box-shadow: 0 4px 15px rgba(99, 110, 114, 0.3);
+      }
+
+      .complete-btn.completed:hover {
+        box-shadow: 0 6px 20px rgba(99, 110, 114, 0.4);
+      }
+
+      .complete-btn:active {
+        transform: translateY(0) scale(0.98);
+      }
+
+      .task-content {
+        flex: 1;
+      }
+
+      .task-title {
+        font-size: 1.1em;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .task-item.completed .task-title {
+        text-decoration: line-through;
+        color: var(--text-secondary);
+      }
+
+      .task-description {
+        color: var(--text-secondary);
+        font-size: 0.95em;
+        margin-bottom: 12px;
+        line-height: 1.5;
+      }
+
+      .task-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 0.85em;
+        color: var(--text-secondary);
+      }
+
+      .task-meta i {
+        margin-right: 5px;
+      }
+
+      .task-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .btn-small {
+        padding: 6px 12px;
+        font-size: 0.85em;
+      }
+
+      .btn-icon {
+        padding: 8px 12px;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-secondary);
+      }
+
+      .empty-state i {
+        font-size: 4em;
+        margin-bottom: 20px;
+        opacity: 0.3;
+      }
+
+      .streak-display {
+        text-align: center;
+        padding: 20px;
+        background: linear-gradient(
+          135deg,
+          #8b5cf6 0%,
+          #a855f7 50%,
+          #c084fc 100%
+        );
+        color: white;
+        border-radius: 15px;
+        margin-bottom: 20px;
+      }
+
+      .streak-number {
+        font-size: 3em;
+        font-weight: bold;
+      }
+
+      .streak-label {
+        font-size: 1.1em;
+        margin-top: 5px;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 200px;
+        margin-top: 20px;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: var(--bg-primary);
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+        color: var(--text-secondary);
+      }
+
+      /* Disable custom cursor and hover-heavy effects on touch devices */
+      @media (hover: none), (pointer: coarse) {
+        * {
+          cursor: auto !important;
+        }
+        .custom-cursor {
+          display: none !important;
+        }
+      }
+
+      /* Respect reduced motion preferences */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .main-content {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .header {
+          padding: 20px;
+        }
+        .header-title h1 {
+          font-size: 1.5em;
+        }
+        .app-container {
+          padding: 16px;
+          padding-left: calc(16px + env(safe-area-inset-left));
+          padding-right: calc(16px + env(safe-area-inset-right));
+        }
+        .header {
+          gap: 16px;
+        }
+        .header-controls {
+          width: 100%;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+        }
+        .header-controls .theme-toggle,
+        .header-controls .btn {
+          width: 100%;
+          justify-content: center;
+        }
+        .main-content {
+          gap: 16px;
+        }
+        .tasks-panel {
+          padding: 20px;
+        }
+        .card {
+          padding: 20px;
+        }
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+        .task-actions {
+          flex-wrap: wrap;
+        }
+        .complete-btn {
+          min-width: 100px;
+          padding: 10px 16px;
+          font-size: 0.85em;
+        }
+        .quick-add {
+          flex-direction: column;
+        }
+        .quick-add input,
+        .quick-add .btn {
+          width: 100%;
+        }
+        .form-actions {
+          flex-direction: column;
+        }
+        .task-item {
+          padding: 16px;
+        }
+        .modal-content {
+          width: 95%;
+          padding: 20px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .header-title h1 {
+          font-size: 1.3em;
+        }
+        .header-controls {
+          grid-template-columns: 1fr; /* stack controls */
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Custom animated cursor -->
+    <div class="custom-cursor" id="customCursor"></div>
+
+    <div class="app-container">
+      <header class="header">
+        <div class="header-title">
+          <i class="fas fa-tasks fa-2x"></i>
+          <div>
+            <h1>Task Manager Pro</h1>
+            <p>Stay organized, stay productive</p>
+          </div>
+        </div>
+        <div class="header-controls">
+          <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon"></i>
+          </button>
+          <button class="btn btn-primary" id="exportBtn">
+            <i class="fas fa-download"></i> Export
+          </button>
+          <button class="btn btn-primary" id="statsBtn">
+            <i class="fas fa-chart-pie"></i> Stats
+          </button>
+        </div>
+      </header>
+
+      <div class="main-content">
+        <div class="tasks-panel">
+          <div class="quick-add">
+            <input
+              type="text"
+              id="quickAddInput"
+              placeholder="Quick add task... (Press Enter)" />
+            <button class="btn btn-primary" id="quickAddBtn">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+
+          <button
+            class="btn btn-secondary"
+            id="showFormBtn"
+            style="
+              margin-bottom: 20px;
+              background: rgba(255, 255, 255, 0.9);
+              color: #2d3436;
+              font-weight: 600;
+              border: 2px solid rgba(0, 0, 0, 0.1);
+            ">
+            <i class="fas fa-plus-circle"></i> Add Detailed Task
+          </button>
+
+          <div class="add-task-form" id="taskForm" style="display: none">
+            <h3 style="margin-bottom: 15px">
+              <i class="fas fa-edit"></i>
+              <span id="formTitle">Add New Task</span>
+            </h3>
+            <div class="form-group">
+              <label>Title *</label>
+              <input type="text" id="taskTitle" required />
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="taskDescription"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Due Date</label>
+              <input type="date" id="taskDueDate" />
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="taskCategory">
+                <option value="work">Work</option>
+                <option value="personal">Personal</option>
+                <option value="study">Study</option>
+                <option value="shopping">Shopping</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="saveTaskBtn">
+                <i class="fas fa-save"></i>
+                <span id="saveBtnText">Save Task</span>
+              </button>
+              <button class="btn btn-secondary" id="cancelBtn">
+                <i class="fas fa-times"></i> Cancel
+              </button>
+            </div>
+          </div>
+
+          <div class="categories-filter" id="categoriesFilter"></div>
+
+          <div class="progress-section">
+            <h3><i class="fas fa-chart-line"></i> Progress</h3>
+            <div class="progress-bar-container">
+              <div class="progress-bar" id="progressBar">0%</div>
+            </div>
+          </div>
+
+          <div class="tasks-list" id="tasksList"></div>
+        </div>
+
+        <aside class="sidebar">
+          <div class="card">
+            <div class="streak-display">
+              <div class="streak-number" id="streakNumber">0</div>
+              <div class="streak-label">🔥 Day Streak</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">
+              <i class="fas fa-chart-bar"></i> Statistics
+            </h3>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-number" id="totalTasks">0</div>
+                <div class="stat-label">Total Tasks</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="completedTasks">0</div>
+                <div class="stat-label">Completed</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="pendingTasks">0</div>
+                <div class="stat-label">Pending</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" id="todayTasks">0</div>
+                <div class="stat-label">Due Today</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card-title">
+              <i class="fas fa-trophy"></i> Achievements
+            </h3>
+            <div id="achievementsList"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="modal" id="statsModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="fas fa-chart-pie"></i> Detailed Statistics</h2>
+          <button class="modal-close" id="closeStatsModal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div id="statsContent"></div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script>
+      // Data structures
+      let tasks = [];
+      let editingTaskId = null;
+      let currentFilter = "all";
+      let streak = 0;
+      let lastCompletionDate = null;
+
+      // Categories configuration
+      const categories = [
+        {
+          id: "all",
+          name: "All",
+          class: "category-all",
+        },
+        {
+          id: "work",
+          name: "Work",
+          class: "category-work",
+        },
+        {
+          id: "personal",
+          name: "Personal",
+          class: "category-personal",
+        },
+        {
+          id: "study",
+          name: "Study",
+          class: "category-study",
+        },
+        {
+          id: "shopping",
+          name: "Shopping",
+          class: "category-shopping",
+        },
+        {
+          id: "other",
+          name: "Other",
+          class: "category-other",
+        },
+      ];
+
+      // Achievements
+      const achievements = [
+        {
+          id: "first_task",
+          name: "First Step",
+          desc: "Complete your first task",
+          icon: "🎯",
+          unlocked: false,
+        },
+        {
+          id: "ten_tasks",
+          name: "Getting Started",
+          desc: "Complete 10 tasks",
+          icon: "⭐",
+          unlocked: false,
+        },
+        {
+          id: "week_streak",
+          name: "Consistency",
+          desc: "7-day streak",
+          icon: "🔥",
+          unlocked: false,
+        },
+        {
+          id: "fifty_tasks",
+          name: "Productive",
+          desc: "Complete 50 tasks",
+          icon: "🏆",
+          unlocked: false,
+        },
+      ];
+
+      // Initialize app
+      function init() {
+        loadData();
+        renderCategories();
+        renderTasks();
+        updateStats();
+        updateAchievements();
+        setupEventListeners();
+        setupDragAndDrop();
+        applyTheme();
+      }
+
+      function loadData() {
+        // Load from memory (simulated localStorage)
+        tasks = window.taskData || [];
+        streak = window.streakData || 0;
+        lastCompletionDate = window.lastCompletionData || null;
+      }
+
+      function saveData() {
+        window.taskData = tasks;
+        window.streakData = streak;
+        window.lastCompletionData = lastCompletionDate;
+      }
+
+      function setupEventListeners() {
+        // Quick add
+        document
+          .getElementById("quickAddInput")
+          .addEventListener("keypress", (e) => {
+            if (e.key === "Enter") quickAddTask();
+          });
+        document
+          .getElementById("quickAddBtn")
+          .addEventListener("click", quickAddTask);
+
+        // Form controls
+        document.getElementById("showFormBtn").addEventListener("click", () => {
+          document.getElementById("taskForm").style.display = "block";
+          editingTaskId = null;
+          resetForm();
+        });
+        document
+          .getElementById("saveTaskBtn")
+          .addEventListener("click", saveTask);
+        document.getElementById("cancelBtn").addEventListener("click", () => {
+          document.getElementById("taskForm").style.display = "none";
+          resetForm();
+        });
+
+        // Theme toggle
+        document
+          .getElementById("themeToggle")
+          .addEventListener("click", toggleTheme);
+
+        // Export
+        document
+          .getElementById("exportBtn")
+          .addEventListener("click", exportTasks);
+
+        // Stats modal
+        document
+          .getElementById("statsBtn")
+          .addEventListener("click", showStatsModal);
+        document
+          .getElementById("closeStatsModal")
+          .addEventListener("click", () => {
+            document.getElementById("statsModal").classList.remove("active");
+          });
+      }
+
+      function renderCategories() {
+        const container = document.getElementById("categoriesFilter");
+        container.innerHTML = categories
+          .map(
+            (cat) => `
+                <div class="category-badge ${cat.class} ${
+              currentFilter === cat.id ? "active" : ""
+            }"
+                     onclick="filterTasks('${cat.id}')">
+                    ${cat.name}
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      function filterTasks(category) {
+        currentFilter = category;
+        renderCategories();
+        renderTasks();
+      }
+
+      function quickAddTask() {
+        const input = document.getElementById("quickAddInput");
+        const title = input.value.trim();
+
+        if (!title) return;
+
+        const task = {
+          id: Date.now(),
+          title,
+          description: "",
+          category: "other",
+          dueDate: "",
+          completed: false,
+          createdAt: new Date().toISOString(),
+          order: tasks.length,
+        };
+
+        tasks.push(task);
+        input.value = "";
+        saveData();
+        renderTasks();
+        updateStats();
+      }
+
+      function saveTask() {
+        const title = document.getElementById("taskTitle").value.trim();
+        const description = document
+          .getElementById("taskDescription")
+          .value.trim();
+        const dueDate = document.getElementById("taskDueDate").value;
+        const category = document.getElementById("taskCategory").value;
+
+        if (!title) {
+          alert("Please enter a task title");
+          return;
+        }
+
+        if (editingTaskId) {
+          const task = tasks.find((t) => t.id === editingTaskId);
+          task.title = title;
+          task.description = description;
+          task.dueDate = dueDate;
+          task.category = category;
+        } else {
+          const task = {
+            id: Date.now(),
+            title,
+            description,
+            category,
+            dueDate,
+            completed: false,
+            createdAt: new Date().toISOString(),
+            order: tasks.length,
+          };
+          tasks.push(task);
+        }
+
+        document.getElementById("taskForm").style.display = "none";
+        resetForm();
+        saveData();
+        renderTasks();
+        updateStats();
+      }
+
+      function resetForm() {
+        document.getElementById("taskTitle").value = "";
+        document.getElementById("taskDescription").value = "";
+        document.getElementById("taskDueDate").value = "";
+        document.getElementById("taskCategory").value = "work";
+        editingTaskId = null;
+        document.getElementById("formTitle").textContent = "Add New Task";
+        document.getElementById("saveBtnText").textContent = "Save Task";
+      }
+
+      function editTask(id) {
+        const task = tasks.find((t) => t.id === id);
+        document.getElementById("taskTitle").value = task.title;
+        document.getElementById("taskDescription").value = task.description;
+        document.getElementById("taskDueDate").value = task.dueDate;
+        document.getElementById("taskCategory").value = task.category;
+        document.getElementById("taskForm").style.display = "block";
+        editingTaskId = id;
+        document.getElementById("formTitle").textContent = "Edit Task";
+        document.getElementById("saveBtnText").textContent = "Update Task";
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }
+
+      function toggleTask(id) {
+        const task = tasks.find((t) => t.id === id);
+        const wasCompleted = task.completed;
+        task.completed = !task.completed;
+
+        if (task.completed && !wasCompleted) {
+          updateStreak();
+          // Trigger party popper animation with a small delay for better UX
+          setTimeout(() => {
+            createPartyPopper(id);
+          }, 100);
+        }
+
+        saveData();
+        renderTasks();
+        updateStats();
+        updateAchievements();
+      }
+
+      function deleteTask(id) {
+        if (confirm("Are you sure you want to delete this task?")) {
+          tasks = tasks.filter((t) => t.id !== id);
+          saveData();
+          renderTasks();
+          updateStats();
+        }
+      }
+
+      function createPartyPopper(taskId) {
+        // Find the task element
+        const taskElement = document.querySelector(`[data-id="${taskId}"]`);
+        if (!taskElement) {
+          console.log('Task element not found for ID:', taskId);
+          return;
+        }
+
+        // Get task position
+        const rect = taskElement.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        console.log('Creating party popper at:', centerX, centerY);
+
+        // Create multiple party poppers from different directions
+        const burstPositions = [
+          { x: centerX, y: centerY, delay: 0 }, // Center
+          { x: rect.left - 20, y: centerY, delay: 200 }, // Left side
+          { x: rect.right + 20, y: centerY, delay: 400 }, // Right side
+          { x: centerX, y: rect.top - 20, delay: 600 }, // Top
+          { x: centerX, y: rect.bottom + 20, delay: 800 }, // Bottom
+        ];
+
+        burstPositions.forEach((position, burstIndex) => {
+          setTimeout(() => {
+            createSingleBurst(position.x, position.y, burstIndex);
+          }, position.delay);
+        });
+
+        // Enhanced sound effect with multiple tones
+        try {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          
+          // Create a more celebratory sound
+          for (let i = 0; i < 3; i++) {
+            setTimeout(() => {
+              const oscillator = audioContext.createOscillator();
+              const gainNode = audioContext.createGain();
+              
+              oscillator.connect(gainNode);
+              gainNode.connect(audioContext.destination);
+              
+              const frequency = 600 + (i * 200);
+              oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+              oscillator.frequency.exponentialRampToValueAtTime(frequency + 300, audioContext.currentTime + 0.1);
+              
+              gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+              gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+              
+              oscillator.start(audioContext.currentTime);
+              oscillator.stop(audioContext.currentTime + 0.4);
+            }, i * 100);
+          }
+        } catch (e) {
+          console.log('Audio not supported:', e);
+        }
+      }
+
+      function createSingleBurst(x, y, burstIndex) {
+        // Create party popper container
+        const partyPopper = document.createElement('div');
+        partyPopper.className = 'party-popper';
+        partyPopper.style.position = 'fixed';
+        partyPopper.style.left = x + 'px';
+        partyPopper.style.top = y + 'px';
+        partyPopper.style.pointerEvents = 'none';
+        partyPopper.style.zIndex = '10000';
+
+        // Create confetti pieces with different patterns based on burst position
+        const confettiCount = burstIndex === 0 ? 20 : 12; // Center gets more confetti
+        const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#fdcb6e', '#a29bfe', '#fd79a8', '#00b894', '#e17055', '#6c5ce7', '#e84393', '#f39c12', '#e74c3c', '#9b59b6', '#3498db', '#2ecc71'];
+
+        for (let i = 0; i < confettiCount; i++) {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.position = 'absolute';
+          confetti.style.width = (6 + Math.random() * 4) + 'px';
+          confetti.style.height = (6 + Math.random() * 4) + 'px';
+          confetti.style.pointerEvents = 'none';
+          
+          // Different burst patterns based on position
+          let angle, distance;
+          if (burstIndex === 0) { // Center - 360 degree burst
+            angle = (i / confettiCount) * 360 + (Math.random() - 0.5) * 60;
+            distance = 25 + Math.random() * 60;
+          } else if (burstIndex === 1) { // Left side - burst rightward
+            angle = -90 + (Math.random() - 0.5) * 120;
+            distance = 20 + Math.random() * 80;
+          } else if (burstIndex === 2) { // Right side - burst leftward
+            angle = 90 + (Math.random() - 0.5) * 120;
+            distance = 20 + Math.random() * 80;
+          } else if (burstIndex === 3) { // Top - burst downward
+            angle = 0 + (Math.random() - 0.5) * 120;
+            distance = 20 + Math.random() * 80;
+          } else { // Bottom - burst upward
+            angle = 180 + (Math.random() - 0.5) * 120;
+            distance = 20 + Math.random() * 80;
+          }
+          
+          const confettiX = Math.cos(angle * Math.PI / 180) * distance;
+          const confettiY = Math.sin(angle * Math.PI / 180) * distance;
+          
+          confetti.style.left = confettiX + 'px';
+          confetti.style.top = confettiY + 'px';
+          confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+          
+          // Random colors
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          
+          // Add variety to confetti shapes
+          const shapeType = Math.random();
+          if (shapeType < 0.3) {
+            confetti.style.borderRadius = '50%';
+          } else if (shapeType < 0.6) {
+            confetti.style.borderRadius = '0';
+          } else {
+            confetti.style.borderRadius = '2px';
+          }
+          
+          partyPopper.appendChild(confetti);
+        }
+
+        // Add to document
+        document.body.appendChild(partyPopper);
+
+        // Remove after animation
+        setTimeout(() => {
+          if (partyPopper && partyPopper.parentNode) {
+            partyPopper.parentNode.removeChild(partyPopper);
+          }
+        }, 2500);
+      }
+
+      function renderTasks() {
+        const container = document.getElementById("tasksList");
+        let filteredTasks = tasks;
+
+        if (currentFilter !== "all") {
+          filteredTasks = tasks.filter((t) => t.category === currentFilter);
+        }
+
+        filteredTasks.sort((a, b) => a.order - b.order);
+
+        if (filteredTasks.length === 0) {
+          container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>No tasks yet</h3>
+                        <p>Add your first task to get started!</p>
+                    </div>
+                `;
+          return;
+        }
+
+        container.innerHTML = filteredTasks
+          .map((task) => {
+            const category = categories.find((c) => c.id === task.category);
+            const dueDate = task.dueDate ? new Date(task.dueDate) : null;
+            const isOverdue =
+              dueDate && dueDate < new Date() && !task.completed;
+
+            return `
+                    <div class="task-item ${
+                      task.completed ? "completed" : ""
+                    }" data-id="${task.id}">
+                        <div class="task-header">
+                            <div class="task-content">
+                                <div class="task-title">${task.title}</div>
+                                ${
+                                  task.description
+                                    ? `<div class="task-description">${task.description}</div>`
+                                    : ""
+                                }
+                                <div class="task-meta">
+                                    <span class="category-badge ${
+                                      category.class
+                                    }" style="padding: 4px 12px; font-size: 0.8em;">
+                                        ${category.name}
+                                    </span>
+                                    ${
+                                      task.dueDate
+                                        ? `
+                                        <span style="color: ${
+                                          isOverdue
+                                            ? "var(--danger)"
+                                            : "var(--text-secondary)"
+                                        }">
+                                            <i class="fas fa-calendar"></i> ${new Date(
+                                              task.dueDate
+                                            ).toLocaleDateString()}
+                                        </span>
+                                    `
+                                        : ""
+                                    }
+                                    <span>
+                                        <i class="fas fa-clock"></i> ${new Date(
+                                          task.createdAt
+                                        ).toLocaleDateString()}
+                                    </span>
+                                </div>
+                                <div class="task-actions">
+                                    <button class="btn btn-secondary btn-small btn-icon" onclick="editTask(${
+                                      task.id
+                                    })">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-secondary btn-small btn-icon" onclick="deleteTask(${
+                                      task.id
+                                    })" style="color: var(--danger);">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                    <button class="complete-btn ${
+                                      task.completed ? "completed" : ""
+                                    }" onclick="toggleTask(${task.id})">
+                                        <i class="fas ${task.completed ? "fa-check" : "fa-plus"}"></i>
+                                        ${task.completed ? "Completed" : "Complete"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+          })
+          .join("");
+      }
+
+      function setupDragAndDrop() {
+        const container = document.getElementById("tasksList");
+        new Sortable(container, {
+          animation: 150,
+          ghostClass: "dragging",
+          onEnd: function (evt) {
+            const taskId = parseInt(evt.item.dataset.id);
+            const newIndex = evt.newIndex;
+
+            const task = tasks.find((t) => t.id === taskId);
+            tasks = tasks.filter((t) => t.id !== taskId);
+            tasks.splice(newIndex, 0, task);
+
+            tasks.forEach((t, idx) => (t.order = idx));
+            saveData();
+          },
+        });
+      }
+
+      function updateStats() {
+        const total = tasks.length;
+        const completed = tasks.filter((t) => t.completed).length;
+        const pending = total - completed;
+        const today = new Date().toDateString();
+        const todayTasks = tasks.filter((t) => {
+          if (!t.dueDate) return false;
+          return new Date(t.dueDate).toDateString() === today;
+        }).length;
+
+        const percentage =
+          total > 0 ? Math.round((completed / total) * 100) : 0;
+
+        document.getElementById("totalTasks").textContent = total;
+        document.getElementById("completedTasks").textContent = completed;
+        document.getElementById("pendingTasks").textContent = pending;
+        document.getElementById("todayTasks").textContent = todayTasks;
+        document.getElementById("streakNumber").textContent = streak;
+
+        const progressBar = document.getElementById("progressBar");
+        progressBar.style.width = percentage + "%";
+        progressBar.textContent = percentage + "%";
+      }
+
+      function updateStreak() {
+        const today = new Date().toDateString();
+
+        if (lastCompletionDate === today) {
+          return; // Already completed today
+        }
+
+        if (lastCompletionDate) {
+          const lastDate = new Date(lastCompletionDate);
+          const todayDate = new Date(today);
+          const diffDays = Math.floor(
+            (todayDate - lastDate) / (1000 * 60 * 60 * 24)
+          );
+
+          if (diffDays === 1) {
+            streak++; // Consecutive day
+          } else if (diffDays > 1) {
+            streak = 1; // Streak broken, restart
+          }
+        } else {
+          streak = 1; // First completion
+        }
+
+        lastCompletionDate = today;
+        saveData();
+      }
+
+      function updateAchievements() {
+        const completedCount = tasks.filter((t) => t.completed).length;
+
+        if (completedCount >= 1) achievements[0].unlocked = true;
+        if (completedCount >= 10) achievements[1].unlocked = true;
+        if (streak >= 7) achievements[2].unlocked = true;
+        if (completedCount >= 50) achievements[3].unlocked = true;
+
+        const container = document.getElementById("achievementsList");
+        container.innerHTML = achievements
+          .map(
+            (ach) => `
+                <div style="padding: 12px; background: var(--bg-secondary); border-radius: 10px; margin-bottom: 10px; opacity: ${
+                  ach.unlocked ? "1" : "0.5"
+                };">
+                    <div style="font-size: 2em;">${ach.icon}</div>
+                    <div style="font-weight: 600; margin-top: 5px;">${
+                      ach.name
+                    }</div>
+                    <div style="font-size: 0.85em; color: var(--text-secondary);">${
+                      ach.desc
+                    }</div>
+                    ${
+                      ach.unlocked
+                        ? '<div style="color: var(--success); margin-top: 5px;"><i class="fas fa-check-circle"></i> Unlocked</div>'
+                        : ""
+                    }
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      function toggleTheme() {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute("data-theme");
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+        html.setAttribute("data-theme", newTheme);
+
+        const icon = document.querySelector("#themeToggle i");
+        icon.className = newTheme === "dark" ? "fas fa-sun" : "fas fa-moon";
+
+        window.themePreference = newTheme;
+      }
+
+      function applyTheme() {
+        const savedTheme = window.themePreference || "light";
+        document.documentElement.setAttribute("data-theme", savedTheme);
+        const icon = document.querySelector("#themeToggle i");
+        icon.className = savedTheme === "dark" ? "fas fa-sun" : "fas fa-moon";
+      }
+
+      function exportTasks() {
+        const csv = convertToCSV(tasks);
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `tasks_export_${
+          new Date().toISOString().split("T")[0]
+        }.csv`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }
+
+      function convertToCSV(data) {
+        const headers = [
+          "Title",
+          "Description",
+          "Category",
+          "Due Date",
+          "Status",
+          "Created At",
+        ];
+        const rows = data.map((task) => [
+          task.title,
+          task.description,
+          task.category,
+          task.dueDate || "N/A",
+          task.completed ? "Completed" : "Pending",
+          new Date(task.createdAt).toLocaleString(),
+        ]);
+
+        const csvContent = [
+          headers.join(","),
+          ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+        ].join("\n");
+
+        return csvContent;
+      }
+
+      function showStatsModal() {
+        const modal = document.getElementById("statsModal");
+        const content = document.getElementById("statsContent");
+
+        const completedByCategory = {};
+        categories.slice(1).forEach((cat) => {
+          completedByCategory[cat.name] = tasks.filter(
+            (t) => t.category === cat.id && t.completed
+          ).length;
+        });
+
+        const last7Days = [];
+        for (let i = 6; i >= 0; i--) {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+          const dateStr = date.toDateString();
+          const count = tasks.filter((t) => {
+            if (!t.completed) return false;
+            const taskDate = new Date(t.createdAt).toDateString();
+            return taskDate === dateStr;
+          }).length;
+          last7Days.push({
+            date: date.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            }),
+            count,
+          });
+        }
+
+        content.innerHTML = `
+                <div style="margin-bottom: 30px;">
+                    <h3 style="margin-bottom: 15px;"><i class="fas fa-chart-bar"></i> Completed Tasks by Category</h3>
+                    <div style="background: var(--bg-secondary); padding: 20px; border-radius: 15px;">
+                        ${Object.entries(completedByCategory)
+                          .map(
+                            ([cat, count]) => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 10px; background: var(--bg-primary); border-radius: 8px;">
+                                <span style="font-weight: 600;">${cat}</span>
+                                <span style="font-size: 1.5em; font-weight: bold; color: var(--primary);">${count}</span>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 style="margin-bottom: 15px;"><i class="fas fa-calendar-week"></i> Last 7 Days Activity</h3>
+                    <div style="background: var(--bg-secondary); padding: 20px; border-radius: 15px;">
+                        ${last7Days
+                          .map(
+                            (day) => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 10px; background: var(--bg-primary); border-radius: 8px;">
+                                <span>${day.date}</span>
+                                <div style="flex: 1; margin: 0 15px; background: var(--bg-tertiary); height: 10px; border-radius: 5px; overflow: hidden;">
+                                    <div style="height: 100%; width: ${
+                                      day.count * 20
+                                    }%; background: var(--gradient); transition: width 0.3s;"></div>
+                                </div>
+                                <span style="font-weight: bold; color: var(--primary);">${
+                                  day.count
+                                }</span>
+                            </div>
+                        `
+                          )
+                          .join("")}
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; text-align: center; padding: 20px; background: var(--gradient); color: white; border-radius: 15px;">
+                    <div style="font-size: 2.5em; font-weight: bold;">${
+                      tasks.filter((t) => t.completed).length
+                    }</div>
+                    <div style="font-size: 1.2em; margin-top: 5px;">Total Tasks Completed</div>
+                </div>
+            `;
+
+        modal.classList.add("active");
+      }
+
+      // Custom cursor functionality
+      function initCustomCursor() {
+        const cursor = document.getElementById("customCursor");
+        let mouseX = 0,
+          mouseY = 0;
+        let cursorX = 0,
+          cursorY = 0;
+
+        // Update cursor position
+        function updateCursor() {
+          cursorX += (mouseX - cursorX) * 0.1;
+          cursorY += (mouseY - cursorY) * 0.1;
+          cursor.style.left = cursorX + "px";
+          cursor.style.top = cursorY + "px";
+          requestAnimationFrame(updateCursor);
+        }
+
+        // Mouse move event
+        document.addEventListener("mousemove", (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        });
+
+        // Mouse enter/leave events
+        document.addEventListener("mouseenter", () => {
+          cursor.style.opacity = "1";
+        });
+
+        document.addEventListener("mouseleave", () => {
+          cursor.style.opacity = "0";
+        });
+
+        // Hover effects
+        const interactiveElements = document.querySelectorAll(
+          "button, input, .task-item, .card, .category-badge"
+        );
+
+        interactiveElements.forEach((element) => {
+          element.addEventListener("mouseenter", () => {
+            cursor.classList.add("hover");
+          });
+
+          element.addEventListener("mouseleave", () => {
+            cursor.classList.remove("hover");
+          });
+        });
+
+        // Click effects
+        document.addEventListener("mousedown", () => {
+          cursor.classList.add("click");
+        });
+
+        document.addEventListener("mouseup", () => {
+          cursor.classList.remove("click");
+        });
+
+        // Start cursor animation
+        updateCursor();
+      }
+
+      // Initialize the application
+      init();
+      initCustomCursor();
+    </script>
+  </body>
+</html>
