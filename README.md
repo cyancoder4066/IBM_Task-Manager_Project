@@ -2,10 +2,6 @@
 
 A modern, interactive task management web app designed to help you stay organized, productive, and consistent. Task Manager Pro lets you create, categorize, and track tasks with progress visualization, daily streaks, and achievement rewards — all in a clean, responsive interface.
 
-# 📝 Task Manager Pro
-
-Stay organized, stay productive — **Task Manager Pro** helps you manage your daily tasks efficiently with an elegant, user-friendly interface and built-in productivity tracking features.
-
 ---
 
 ## 🚀 Overview
@@ -54,7 +50,7 @@ Stay organized, stay productive — **Task Manager Pro** helps you manage your d
 | Category | Technologies |
 |-----------|--------------|
 | **Frontend** | HTML5, CSS3, JavaScript |
-| **UI Frameworks** | Tailwind CSS / Custom CSS |
+| **UI Frameworks** | Custom CSS |
 | **Storage** | LocalStorage / JSON-based persistence |
 | **Design Tools** | Figma (for UI prototyping) |
 
