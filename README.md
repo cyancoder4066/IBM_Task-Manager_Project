@@ -59,10 +59,10 @@ A modern, interactive task management web app designed to help you stay organize
 ## 🖥️ Project Preview
 
 ### Dashboard (No Tasks)
-![Dashboard Empty](screenshots/dashboard-empty.png)
+![Dashboard Empty](screenshots/empty.png)
 
 ### Dashboard (With Tasks)
-![Dashboard Tasks](screenshots/dashboard-tasks.png)
+![Dashboard Tasks](screenshots/task.png)
 
 > Add your first task to get started and unlock achievements!
 
@@ -72,4 +72,4 @@ A modern, interactive task management web app designed to help you stay organize
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/<your-username>/Task-Manager-Pro.git
+   git clone https://github.com/<your-username>/IBM_Task-Manager_Project.git
